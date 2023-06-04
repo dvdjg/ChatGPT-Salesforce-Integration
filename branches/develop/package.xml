@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>ChatGPTService</members>
+        <members>RecordFieldsFetcher</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>DJG_app_Salesforce_AI</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>chatGPTAPIKey</members>
+        <name>CustomLabel</name>
+    </types>
+    <types>
+        <members>DJG_app_Home_Page_Default</members>
+        <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>chatGPTBot</members>
+        <members>chatGPTIntelligence</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>Open_AI_URL</members>
+        <name>RemoteSiteSetting</name>
+    </types>
+    <types>
+        <members>ConsoleToolkit</members>
+        <name>StaticResource</name>
+    </types>
+    <version>56.0</version>
+</Package>
