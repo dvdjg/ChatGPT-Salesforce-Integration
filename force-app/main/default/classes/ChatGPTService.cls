@@ -21,14 +21,19 @@
  * @description   Apex class to interact with chat GPT Web Service
  */ 
 public with sharing class ChatGPTService {
-    private static final String API_KEY = System.label.chatGPTAPIKey; // Replace with your actual API key
-    private static final String ENDPOINT_URL = 'https://api.openai.com/v1/chat/completions';
+    //private static final String API_KEY = System.label.chatGPTAPIKey; // Replace with your actual API key
+    //private static final String ENDPOINT_URL = 'https://api.openai.com/v1/chat/completions';
 
     /**
      * @description Method to generate response from ChatGPT
      */
     @AuraEnabled(cacheable=false)
     public static String generateResponse(String messageText) {
+        OpenAI_Config__mdt config = OpenAI_Config__mdt.getInstance('Main');
+
+        String API_KEY = config.api_key__c; // Replace with your actual API key
+        String ENDPOINT_URL = config.endpoint__c;
+
         HttpRequest req = new HttpRequest();
         req.setEndpoint(ENDPOINT_URL);
         req.setMethod('POST');
@@ -75,8 +80,9 @@ public with sharing class ChatGPTService {
                 return responseText;
             }
         } else {
-            System.debug('Error: ' + res.getStatusCode() + ' ' + res.getStatus());
-            throw new ChatGPTException('Error: Unable to generate response from ChatGPT.');
+            String resp = 'Error: ' + res.getStatusCode() + ' ' + res.getStatus();
+            System.debug(resp);
+            throw new ChatGPTException(resp);
         }
 
         return '';
