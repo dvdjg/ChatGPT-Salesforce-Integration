@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>conversation__c</fullName>
+    <externalId>false</externalId>
+    <label>AI Conversation</label>
+    <referenceTo>AI_obj_Conversation__c</referenceTo>
+    <relationshipLabel>AI Roles And Contents</relationshipLabel>
+    <relationshipName>AI_Roles_And_Contents</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>
