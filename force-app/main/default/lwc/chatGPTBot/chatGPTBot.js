@@ -47,7 +47,7 @@ export default class ChatGPTBot extends LightningElement {
             this.messageInput = '';
 
             try {
-                const chatGPTResponse = await generateResponse({ messageText: this.conversation[this.conversation.length - 1]?.text });
+                const chatGPTResponse = await generateResponse({ messageText: this.conversation[this.conversation.length - 1]?.text, conversationName: 'FirstContact' });
                 if (chatGPTResponse && chatGPTResponse.trim() !== '') {
                     const assistantMessage = {
                         id: 'assistant-' + this.conversation.length,

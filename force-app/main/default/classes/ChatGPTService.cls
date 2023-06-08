@@ -23,12 +23,57 @@
 public with sharing class ChatGPTService {
     //private static final String API_KEY = System.label.chatGPTAPIKey; // Replace with your actual API key
     //private static final String ENDPOINT_URL = 'https://api.openai.com/v1/chat/completions';
+    private static final String MODEL = 'gpt-3.5-turbo';
 
     /**
      * @description Method to generate response from ChatGPT
      */
     @AuraEnabled(cacheable=false)
-    public static String generateResponse(String messageText) {
+    public static String generateResponse(String messageText, String conversationName) {
+
+        List<AI_obj_RoleAndContent__c> lstContentsToSave = new List<AI_obj_RoleAndContent__c>();
+        List<AI_obj_RoleAndContent__c> lstContents = [SELECT Id, Name, role__c, content__c, conversation__r.Id FROM AI_obj_RoleAndContent__c WHERE conversation__r.ConversationId__c=:conversationName ORDER BY CreatedDate ASC];
+
+        List<Object> lstPrompts = new List<Object>();
+        Id conversationId;
+        Boolean noContents = lstContents.size() == 0;
+
+        if (noContents) {
+            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = 'system', role__c = 'system', content__c = 'You are a helpful assistant.');
+            lstContents.add(prompt);
+            lstContentsToSave.add(prompt);
+        } else {
+            conversationId = lstContents.get(0).conversation__c;
+        }
+
+        AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = 'user', role__c = 'user', content__c = messageText);
+        lstContents.add(prompt);
+        lstContentsToSave.add(prompt);
+
+        for (AI_obj_RoleAndContent__c content : lstContents) {
+            Map<String, Object> promptBody = new Map<String, Object>{'role' => content.role__c, 'content' => content.content__c};
+            lstPrompts.add(promptBody);
+        }
+        
+        String response = generateResponse(lstPrompts);
+        prompt = new AI_obj_RoleAndContent__c(Name = 'assistant', role__c = 'assistant', content__c = response);
+        lstContentsToSave.add(prompt);
+
+        if (noContents) {
+            AI_obj_Conversation__c conversation = new AI_obj_Conversation__c(Name = conversationName, ConversationId__c = conversationName);
+            upsert conversation ConversationId__c;
+            conversationId = conversation.Id;
+        }
+
+        for (AI_obj_RoleAndContent__c content : lstContentsToSave) {
+            content.conversation__c = conversationId;
+        }
+        insert lstContentsToSave;
+
+        return response;
+    }
+
+    public static String generateResponse(List<Object> lstPrompts) {
         OpenAI_Config__mdt config = OpenAI_Config__mdt.getInstance('Main');
 
         String API_KEY = config.api_key__c; // Replace with your actual API key
@@ -41,20 +86,10 @@ public with sharing class ChatGPTService {
         req.setHeader('Content-Type', 'application/json');
         req.setHeader('Authorization', 'Bearer ' + API_KEY); // Add the API key to the request header
 
-        // Set the request body
-        String prompt = 'You are a helpful assistant.\nUser: ' + messageText + '\nAssistant:';
-        System.debug(prompt); 
-
-        Map<String, Object> PromptBody = new Map<String, Object>();
-        PromptBody.put('role','user');
-        PromptBody.put('content',messageText);
-
-        List<Object> lstPrompts = new List<Object>();
-        lstPrompts.add(PromptBody);
 
         Map<String, Object> requestBody = new Map<String, Object>();
         requestBody.put('messages', lstPrompts);
-        requestBody.put('model', 'gpt-3.5-turbo');
+        requestBody.put('model', MODEL);
         //requestBody.put('max_tokens', 50);
         //requestBody.put('n', 1);
         //requestBody.put('stop', new List<String>{'\n'});
