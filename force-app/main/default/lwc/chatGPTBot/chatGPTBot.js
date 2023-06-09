@@ -35,6 +35,7 @@ export default class ChatGPTBot extends LightningElement {
 
     async handleSendMessage() {
         if (this.messageInput && this.messageInput.trim() !== '') {
+            /*
             const userMessage = {
                 id: 'user-' + this.conversation.length,
                 role: 'user',
@@ -45,9 +46,35 @@ export default class ChatGPTBot extends LightningElement {
             };
             this.conversation = [...this.conversation, userMessage];
             this.messageInput = '';
+            */
 
             try {
-                const chatGPTResponse = await generateResponse({ messageText: this.conversation[this.conversation.length - 1]?.text, conversationName: 'FirstContact' });
+                const chatGPTResponses = await generateResponse({ messageText: this.messageInput, conversationName: 'FirstContact' });
+                this.conversation = chatGPTResponses.map((r, i) => {
+                    let message;
+                    if (r.role == 'user') {
+                        message = {
+                            id: r.role +'-' + i,
+                            role: r.role,
+                            text: r.content,
+                            containerClass: 'slds-chat-message slds-chat-message_outbound user-message',
+                            textClass: 'slds-chat-message__text slds-chat-message__text_outbound',
+                            isBot : false
+                        };
+                    } else {
+                        message = {
+                            id: r.role +'-' + i,
+                            role: r.role,
+                            text: r.content,
+                            containerClass: 'slds-chat-message slds-chat-message_inbound',
+                            textClass: 'slds-chat-message__text slds-chat-message__text_inbound',
+                            isBot : true
+                        };
+                    }
+                    return message;
+                });
+                /*
+                const chatGPTResponse = chatGPTResponses[chatGPTResponses.length - 1].content;
                 if (chatGPTResponse && chatGPTResponse.trim() !== '') {
                     const assistantMessage = {
                         id: 'assistant-' + this.conversation.length,
@@ -61,9 +88,11 @@ export default class ChatGPTBot extends LightningElement {
                 } else {
                     console.error('Error generating ChatGPT response: Empty response');
                 }
+                */
             } catch (error) {
                 console.error('Error generating ChatGPT response:', error);
             }
+            this.messageInput = '';
         }
     }
 

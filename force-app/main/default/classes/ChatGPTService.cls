@@ -29,7 +29,7 @@ public with sharing class ChatGPTService {
      * @description Method to generate response from ChatGPT
      */
     @AuraEnabled(cacheable=false)
-    public static String generateResponse(String messageText, String conversationName) {
+    public static List<AI_obj_RoleAndContent__c> generateResponse(String messageText, String conversationName) {
 
         List<AI_obj_RoleAndContent__c> lstContentsToSave = new List<AI_obj_RoleAndContent__c>();
         List<AI_obj_RoleAndContent__c> lstContents = [SELECT Id, Name, role__c, content__c, conversation__r.Id FROM AI_obj_RoleAndContent__c WHERE conversation__r.ConversationId__c=:conversationName ORDER BY CreatedDate ASC];
@@ -55,8 +55,9 @@ public with sharing class ChatGPTService {
             lstPrompts.add(promptBody);
         }
         
-        String response = generateResponse(lstPrompts);
+        String response = 'Okok'; //generateResponse(lstPrompts);
         prompt = new AI_obj_RoleAndContent__c(Name = 'assistant', role__c = 'assistant', content__c = response);
+        lstContents.add(prompt);
         lstContentsToSave.add(prompt);
 
         if (noContents) {
@@ -70,7 +71,7 @@ public with sharing class ChatGPTService {
         }
         insert lstContentsToSave;
 
-        return response;
+        return lstContents;
     }
 
     public static String generateResponse(List<Object> lstPrompts) {
