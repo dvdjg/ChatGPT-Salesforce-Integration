@@ -34,7 +34,7 @@ public with sharing class ChatGPTService {
         List<AI_obj_RoleAndContent__c> lstContentsToSave = new List<AI_obj_RoleAndContent__c>();
         List<AI_obj_RoleAndContent__c> lstContents = [SELECT Id, Name, role__c, content__c, conversation__r.Id FROM AI_obj_RoleAndContent__c WHERE conversation__r.ConversationId__c=:conversationName ORDER BY CreatedDate ASC];
 
-        List<Object> lstPrompts = new List<Object>();
+        List<Object> lstPromptsToQuery = new List<Object>();
         Id conversationId;
         Boolean noContents = lstContents.size() == 0;
 
@@ -46,19 +46,23 @@ public with sharing class ChatGPTService {
             conversationId = lstContents.get(0).conversation__c;
         }
 
-        AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = 'user', role__c = 'user', content__c = messageText);
-        lstContents.add(prompt);
-        lstContentsToSave.add(prompt);
+        if (!String.isBlank(messageText)) {
+            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = 'user', role__c = 'user', content__c = messageText);
+            lstContents.add(prompt);
+            lstContentsToSave.add(prompt);
+        }
 
         for (AI_obj_RoleAndContent__c content : lstContents) {
             Map<String, Object> promptBody = new Map<String, Object>{'role' => content.role__c, 'content' => content.content__c};
-            lstPrompts.add(promptBody);
+            lstPromptsToQuery.add(promptBody);
         }
         
-        String response = 'Okok'; //generateResponse(lstPrompts);
-        prompt = new AI_obj_RoleAndContent__c(Name = 'assistant', role__c = 'assistant', content__c = response);
-        lstContents.add(prompt);
-        lstContentsToSave.add(prompt);
+        if (!String.isBlank(messageText)) {
+            String response = generateResponse(lstPromptsToQuery);
+            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = 'assistant', role__c = 'assistant', content__c = response);
+            lstContents.add(prompt);
+            lstContentsToSave.add(prompt);
+        }
 
         if (noContents) {
             AI_obj_Conversation__c conversation = new AI_obj_Conversation__c(Name = conversationName, ConversationId__c = conversationName);
@@ -69,7 +73,10 @@ public with sharing class ChatGPTService {
         for (AI_obj_RoleAndContent__c content : lstContentsToSave) {
             content.conversation__c = conversationId;
         }
-        insert lstContentsToSave;
+        
+        if (lstContentsToSave.size() > 0) {
+            insert lstContentsToSave;
+        }
 
         return lstContents;
     }

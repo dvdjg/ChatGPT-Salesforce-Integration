@@ -19,13 +19,19 @@
  * @author        Jitendra Zaa
  * @email           jitendra.zaa+30@gmail.com
  * @description   TBD
- */ 
+ */
 import { LightningElement, track, api } from 'lwc';
 import generateResponse from '@salesforce/apex/ChatGPTService.generateResponse';
 
 export default class ChatGPTBot extends LightningElement {
     @track conversation = [];
     @track messageInput = '';
+    @track strConversation = 'FirstContact';
+
+    // initialize component
+    async connectedCallback() {
+        this.conversation = await this.responseUserMessage(this.messageInput, this.strConversation);
+    }
 
     handleChange(event) {
         if (event && event.target) {
@@ -34,77 +40,40 @@ export default class ChatGPTBot extends LightningElement {
     }
 
     async handleSendMessage() {
-        if (this.messageInput && this.messageInput.trim() !== '') {
-            /*
-            const userMessage = {
-                id: 'user-' + this.conversation.length,
-                role: 'user',
-                text: this.messageInput,
-                containerClass: 'slds-chat-message slds-chat-message_outbound user-message',
-                textClass: 'slds-chat-message__text slds-chat-message__text_outbound',
-                isBot : false
-            };
-            this.conversation = [...this.conversation, userMessage];
-            this.messageInput = '';
-            */
-
-            try {
-                const chatGPTResponses = await generateResponse({ messageText: this.messageInput, conversationName: 'FirstContact' });
-                this.conversation = chatGPTResponses.map((r, i) => {
-                    let message;
-                    if (r.role == 'user') {
-                        message = {
-                            id: r.role +'-' + i,
-                            role: r.role,
-                            text: r.content,
-                            containerClass: 'slds-chat-message slds-chat-message_outbound user-message',
-                            textClass: 'slds-chat-message__text slds-chat-message__text_outbound',
-                            isBot : false
-                        };
-                    } else {
-                        message = {
-                            id: r.role +'-' + i,
-                            role: r.role,
-                            text: r.content,
-                            containerClass: 'slds-chat-message slds-chat-message_inbound',
-                            textClass: 'slds-chat-message__text slds-chat-message__text_inbound',
-                            isBot : true
-                        };
-                    }
-                    return message;
-                });
-                /*
-                const chatGPTResponse = chatGPTResponses[chatGPTResponses.length - 1].content;
-                if (chatGPTResponse && chatGPTResponse.trim() !== '') {
-                    const assistantMessage = {
-                        id: 'assistant-' + this.conversation.length,
-                        role: 'assistant',
-                        text: chatGPTResponse,
-                        containerClass: 'slds-chat-message slds-chat-message_inbound',
-                        textClass: 'slds-chat-message__text slds-chat-message__text_inbound',
-                        isBot : true
-                    };
-                    this.conversation = [...this.conversation, assistantMessage];
-                } else {
-                    console.error('Error generating ChatGPT response: Empty response');
-                }
-                */
-            } catch (error) {
-                console.error('Error generating ChatGPT response:', error);
-            }
+        if (this.messageInput) {
+            this.conversation = await this.responseUserMessage(this.messageInput, this.strConversation);
             this.messageInput = '';
         }
     }
 
-    @api
-    async generateChatGPTResponse(prompt) {
+    async responseUserMessage(messageInput, conversationName) { 
+        let conversation = [];       
         try {
-            const response = await generateResponse({ prompt: prompt });
+            const chatGPTResponses = await generateResponse({ messageText: messageInput, conversationName});
+            conversation = chatGPTResponses.map((r, i) => ({
+                id: 'PROMPT-' + i,
+                role: r.role__c,
+                text: r.content__c,
+                containerClass: (r.role__c == 'user') ? 'slds-chat-message slds-chat-message_outbound user-message' : 'slds-chat-message slds-chat-message_inbound',
+                textClass: (r.role__c == 'user') ? 'slds-chat-message__text slds-chat-message__text_outbound' : 'slds-chat-message__text slds-chat-message__text_inbound',
+                isBot: r.role__c != 'user'
+            }));
+        } catch (error) {
+            console.error('Error generating ChatGPT response:', error);
+        }
+        return conversation;
+    }
+
+    /*
+    @api
+    async generateChatGPTResponse(messageInput, conversationName) {
+        try {
+            const response = await generateResponse({ messageText: messageInput, conversationName});
             return response;
         } catch (error) {
             console.error('Error: Unable to generate response from ChatGPT.', error);
             return 'Error: Unable to generate response from ChatGPT.';
         }
     }
-    
+    */
 }
