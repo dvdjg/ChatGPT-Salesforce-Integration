@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
+        <members>AI_obj_Conversation__c</members>
+        <members>AI_obj_RoleAndContent__c</members>
+        <members>OpenAI_Config__mdt</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>ChatGPT</members>
         <members>ChatGPTService</members>
         <members>RecordFieldsFetcher</members>
+        <members>soapSforceCom200608Apex</members>
+        <members>soapSforceCom200608Apex_test</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -10,17 +19,45 @@
         <name>CustomApplication</name>
     </types>
     <types>
+        <members>AI_obj_RoleAndContent__c.content__c</members>
+        <members>AI_obj_RoleAndContent__c.conversation__c</members>
+        <members>AI_obj_RoleAndContent__c.role__c</members>
+        <members>OpenAI_Config__mdt.api_key__c</members>
+        <members>OpenAI_Config__mdt.endpoint__c</members>
+        <name>CustomField</name>
+    </types>
+    <types>
         <members>chatGPTAPIKey</members>
         <name>CustomLabel</name>
     </types>
     <types>
+        <members>OpenAI_Config.Main</members>
+        <name>CustomMetadata</name>
+    </types>
+    <types>
+        <members>AI_obj_Conversation__c</members>
+        <members>AI_obj_RoleAndContent__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
         <members>DJG_app_Home_Page_Default</members>
+        <members>Salesforce_AI_UtilityBar</members>
         <name>FlexiPage</name>
+    </types>
+    <types>
+        <members>AI_obj_Conversation__c-AI Conversation Layout</members>
+        <members>AI_obj_RoleAndContent__c-AI Role And Content Layout</members>
+        <name>Layout</name>
     </types>
     <types>
         <members>chatGPTBot</members>
         <members>chatGPTIntelligence</members>
         <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>AI_obj_Conversation__c.All</members>
+        <members>AI_obj_RoleAndContent__c.All</members>
+        <name>ListView</name>
     </types>
     <types>
         <members>Open_AI_URL</members>

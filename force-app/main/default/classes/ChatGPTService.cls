@@ -25,6 +25,12 @@ public with sharing class ChatGPTService {
     //private static final String ENDPOINT_URL = 'https://api.openai.com/v1/chat/completions';
     private static final String MODEL = 'gpt-3.5-turbo';
 
+    public static String generateResponse(String messageText) {
+        List<AI_obj_RoleAndContent__c> lst = generateResponse(messageText, 'FieldsFetcher');
+        String response = lst.get(lst.size()-1).content__c;
+        return response;
+    }
+
     /**
      * @description Method to generate response from ChatGPT
      */

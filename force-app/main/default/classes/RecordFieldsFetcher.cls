@@ -74,7 +74,7 @@
         String promptPrefix = 'This is the information about a service ticket I have, Can you confirm how the client emotion is & what do you make sense of this ? '+
                     'Give a confident answer and dont mention its difficult to determine. If you cant determine emotion then just summarize what you understood. -';
         String prompt = promptPrefix + String.join(nonBlankFieldList, ', '); 
-        return ChatGPTService.generateResponse(prompt, 'FieldsFetcher');
+        return ChatGPTService.generateResponse(prompt);
     }
 
     /**
