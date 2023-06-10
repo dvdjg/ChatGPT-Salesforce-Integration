@@ -19,6 +19,7 @@
         <name>CustomApplication</name>
     </types>
     <types>
+        <members>AI_obj_Conversation__c.ConversationId__c</members>
         <members>AI_obj_RoleAndContent__c.content__c</members>
         <members>AI_obj_RoleAndContent__c.conversation__c</members>
         <members>AI_obj_RoleAndContent__c.role__c</members>
