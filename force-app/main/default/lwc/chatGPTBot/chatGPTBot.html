@@ -13,32 +13,25 @@
         </div>
 
         <div class="slds-box slds-theme_default">
-            <div class="slds-chat">
+            <section role="log" class="slds-chat">
                 <ul class="slds-chat-list">
                     <template for:each={conversation} for:item="message">
-                        <li key={message.id} class="slds-chat-listitem slds-m-bottom_small">
-                            <template lwc:if={message.isBot}>
-                                <div class="slds-chat-message slds-chat-listitem_inbound">
-                                    <div class="slds-chat-message__text">
-                                        <span
-                                            class="slds-chat-message__text slds-chat-message__text_inbound">{message.role}
-                                            : {message.text}</span>
+                        <li key={message.id} class={message.liClass}>
+                            <div class="slds-chat-message">
+                                <div class="slds-chat-message__body">
+                                    <div class={message.messageClass}>
+                                        <span>{message.role}: {message.text}</span>
                                     </div>
+                                    <template lwc:if={message.meta}>
+                                        <div class="slds-chat-message__meta" aria-label={message.metaLabel}>
+                                            {message.meta}</div>
+                                    </template>
                                 </div>
-                            </template>
-                            <template lwc:else>
-                                <div class="slds-chat-message slds-chat-listitem_outbound user-message">
-                                    <div class="slds-chat-message__text">
-                                        <span
-                                            class="slds-chat-message__text slds-chat-message__text_outbound">{message.role}
-                                            : {message.text}</span>
-                                    </div>
-                                </div>
-                            </template>
+                            </div>
                         </li>
                     </template>
                 </ul>
-            </div>
+            </section>
             <div class="slds-grid slds-grid_align-spread slds-p-top_medium">
                 <div class="slds-col slds-size_10-of-12">
                     <span onkeypress={keyCheckMessage}>

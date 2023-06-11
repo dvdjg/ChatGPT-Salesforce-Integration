@@ -115,12 +115,21 @@ export default class ChatGPTBot extends LightningElement {
         let conversation = [];
         try {
             const chatGPTResponses = await generateResponse({ messageText: messageInput, conversationName });
-            conversation = chatGPTResponses.map((r, i) => ({
-                id: r.Id,
-                role: r.role__c,
-                text: r.content__c,
-                isBot: r.role__c != 'user'
-            }));
+            conversation = chatGPTResponses.map((r, i) => {
+                const type = r.role__c != 'user' ? 'inbound' : 'outbound'; // 'inbound', 'outbound', 'event', 'bookend';
+                const meta = 'Taylor • 4:59 PM';
+                return {
+                    id: r.Id,
+                    role: r.role__c,
+                    text: r.content__c,
+                    type: type,
+                    //isBot: r.role__c != 'user',
+                    liClass: 'slds-chat-listitem slds-chat-listitem_'+type,
+                    messageClass: 'slds-chat-message__text slds-chat-message__text_'+type,
+                    metaLabel: 'said '+meta,
+                    meta
+                }
+            });
             this.error = undefined;
         } catch (error) {
             console.error('Error generating ChatGPT response: ', error);
