@@ -116,14 +116,15 @@ export default class ChatGPTBot extends LightningElement {
         try {
             const chatGPTResponses = await generateResponse({ messageText: messageInput, conversationName });
             conversation = chatGPTResponses.map((r, i) => {
+                const created = new Date(r.CreatedDate);
+                const isBot = r.role__c != 'user';
                 const type = r.role__c != 'user' ? 'inbound' : 'outbound'; // 'inbound', 'outbound', 'event', 'bookend';
-                const meta = 'Taylor • 4:59 PM';
+                const meta = (isBot ? 'GPT' : r.CreatedBy.Name) + ' • ' + created.toString();
                 return {
                     id: r.Id,
                     role: r.role__c,
                     text: r.content__c,
                     type: type,
-                    //isBot: r.role__c != 'user',
                     liClass: 'slds-chat-listitem slds-chat-listitem_'+type,
                     messageClass: 'slds-chat-message__text slds-chat-message__text_'+type,
                     metaLabel: 'said '+meta,

@@ -48,7 +48,9 @@ public with sharing class ChatGPTService {
     public static List<AI_obj_RoleAndContent__c> generateResponse(String messageText, String conversationName) {
 
         List<AI_obj_RoleAndContent__c> lstContentsToSave = new List<AI_obj_RoleAndContent__c>();
-        List<AI_obj_RoleAndContent__c> lstContents = [SELECT Id, Name, role__c, content__c, conversation__r.Id FROM AI_obj_RoleAndContent__c WHERE conversation__r.ConversationId__c=:conversationName ORDER BY CreatedDate ASC];
+        List<AI_obj_RoleAndContent__c> lstContents = [
+            SELECT Id, Name, role__c, content__c, conversation__r.Id, CreatedBy.Name, CreatedDate FROM AI_obj_RoleAndContent__c WHERE conversation__r.ConversationId__c=:conversationName ORDER BY CreatedDate ASC
+            ];
         
         List<Object> lstPromptsToQuery = new List<Object>();
         Id conversationId;
