@@ -22,10 +22,14 @@ public with sharing class SObjectListToCSVConverter {
             // Extract the field values for each field name
             for (String fieldName : fieldMap.keySet()) {
                 String fieldValue = String.valueOf(fieldMap.get(fieldName));
-                // Escape any double quotes within the field value
-                fieldValue = fieldValue.replace('"', '""');
-                // Enclose the field value in double quotes
-                fieldValues.add('"' + fieldValue + '"');
+                if (fieldValue.contains('"') || fieldValue.contains(',')) {
+                    // Escape any double quotes within the field value
+                    fieldValue = fieldValue.replace('"', '""');
+                    // Enclose the field value in double quotes
+                    fieldValues.add('"' + fieldValue + '"');
+                } else {
+                    fieldValues.add(fieldValue);
+                }
             }
 
             // Append the field values as a CSV row

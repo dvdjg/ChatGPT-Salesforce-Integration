@@ -79,7 +79,8 @@ public with sharing class ChatGPTService {
         }
         
         if (!String.isBlank(messageText)) {
-            String response = 'Ok ok: ' + String.valueOf(Datetime.now()); // generateResponse(lstPromptsToQuery); // Callout
+            String responseJSON = generateResponse(lstPromptsToQuery); // Callout // 'Ok ok: ' + String.valueOf(Datetime.now()); // 
+            String response = processResponse(responseJSON);
             String name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
             AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'assistant', content__c = response);
             lstContents.add(prompt);
@@ -103,6 +104,36 @@ public with sharing class ChatGPTService {
         }
 
         return lstContents;
+    }
+
+    public class AI_Response {
+        public AI_Response() {
+
+        }
+        public String recipient;
+        public String message;
+        public String action;
+    }
+
+
+    private static String  processResponse(String response) {
+        String ret = response;
+        if (response.startsWith('{') && response.endsWith('}')) {
+            AI_Response res = (AI_Response)JSON.deserializeStrict(response, AI_Response.class);
+
+            if (res.recipient == 'USER') {
+                ret = res.message;
+            } else if (res.recipient == 'SERVER' && res.action == 'QUERY') {
+                List<SObject> queryResults = Database.query(res.message);
+                ret =  SObjectListToCSVConverter.convertToCSV(queryResults);
+            } else if (res.recipient == 'SERVER' && res.action == 'APEX') {
+                ret = soapSforceCom200608Apex.evalString(res.message + ' System.debug(LoggingLevel.Error, JSON.serialize(result));');
+                System.debug(ret);
+            } else {
+                System.debug('Invalid path.');
+            }
+        }
+        return ret;
     }
 
     public static String generateResponse(List<Object> lstPrompts) {
