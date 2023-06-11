@@ -20,17 +20,94 @@
  * @email           jitendra.zaa+30@gmail.com
  * @description   TBD
  */
-import { LightningElement, track, api } from 'lwc';
+/*
+sfdx force:source:deploy --sourcepath ./force-app/main/default/lwc/chatGPTBot/chatGPTBot.js-meta.xml
+ */
+import { LightningElement, track, wire, api } from 'lwc';
 import generateResponse from '@salesforce/apex/ChatGPTService.generateResponse';
+import getConversations from '@salesforce/apex/ChatGPTService.getConversations';
+
+const DEF_CONV = 'First';
 
 export default class ChatGPTBot extends LightningElement {
+    @track conversations = [];
     @track conversation = [];
     @track messageInput = '';
-    @track strConversation = 'FirstContact';
+    @track strConversation = DEF_CONV;
+    @track inputConversation;
+    @track error;
+
+    /*@wire(getConversations) wiredAccount({ error, data }) {
+        if (data) {
+            this.conversations = data.map((r, i) => (
+                {
+                    value: r.ConversationId__c,
+                    label: r.ConversationId__c,
+                    description: r.Name + ' (' + r.PromptCount__c + ')',
+                }
+            ));
+            this.error = undefined;
+        } else if (error) {
+            console.error('Error retrieving conversaions: ', error);
+            this.error = error;
+            this.conversations = [{
+                value: DEF_CONV,
+                label: DEF_CONV,
+                description: DEF_CONV + ' (0)',
+            }];
+        }
+    }*/
+
+    handleInputChange(event) {
+        this.inputConversation = event.detail.value;
+    }
+
+    keycheck(component, event, helper) {
+        if (component.which == 13) {
+            this.strConversation = this.inputConversation;
+            this.connectedCallback();
+        }
+    }
+
+    async handleChangeConversation(event) {
+        // Get the string of the "value" attribute on the selected option
+        if (event && event.detail) {
+            this.strConversation = event.detail.value;
+            this.conversation = await this.responseUserMessage(this.messageInput, this.strConversation);
+            this.messageInput = '';
+        }
+    }
 
     // initialize component
     async connectedCallback() {
-        this.conversation = await this.responseUserMessage(this.messageInput, this.strConversation);
+        await this.init();
+    }
+
+    async init() {
+        try {
+            const data = await getConversations();
+            this.conversations = data.map((r, i) => (
+                {
+                    value: r.ConversationId__c,
+                    label: r.ConversationId__c,
+                    description: r.Name + ' (' + r.PromptCount__c + ')',
+                }
+            ));
+            this.error = undefined;
+            if (this.conversations.length > 0) {
+                this.strConversation = this.conversations[0].value;
+            }
+            this.conversation = await this.responseUserMessage(this.messageInput, this.strConversation);
+            this.messageInput = '';
+        } catch (error) {
+            console.error('Error retrieving conversaions: ', error);
+            this.error = error;
+            this.conversations = [{
+                value: DEF_CONV,
+                label: DEF_CONV,
+                description: DEF_CONV + ' (0)',
+            }];
+        }
     }
 
     handleChange(event) {
@@ -46,20 +123,22 @@ export default class ChatGPTBot extends LightningElement {
         }
     }
 
-    async responseUserMessage(messageInput, conversationName) { 
-        let conversation = [];       
+    async responseUserMessage(messageInput, conversationName) {
+        let conversation = [];
         try {
-            const chatGPTResponses = await generateResponse({ messageText: messageInput, conversationName});
+            const chatGPTResponses = await generateResponse({ messageText: messageInput, conversationName });
             conversation = chatGPTResponses.map((r, i) => ({
-                id: 'PROMPT-' + i,
+                id: r.Id,
                 role: r.role__c,
                 text: r.content__c,
-                containerClass: (r.role__c == 'user') ? 'slds-chat-message slds-chat-message_outbound user-message' : 'slds-chat-message slds-chat-message_inbound',
-                textClass: (r.role__c == 'user') ? 'slds-chat-message__text slds-chat-message__text_outbound' : 'slds-chat-message__text slds-chat-message__text_inbound',
+                //containerClass: (r.role__c == 'user') ? 'slds-chat-message slds-chat-message_outbound user-message' : 'slds-chat-message slds-chat-message_inbound',
+                //textClass: (r.role__c == 'user') ? 'slds-chat-message__text slds-chat-message__text_outbound' : 'slds-chat-message__text slds-chat-message__text_inbound',
                 isBot: r.role__c != 'user'
             }));
+            this.error = undefined;
         } catch (error) {
-            console.error('Error generating ChatGPT response:', error);
+            console.error('Error generating ChatGPT response: ', error);
+            this.error = error;
         }
         return conversation;
     }

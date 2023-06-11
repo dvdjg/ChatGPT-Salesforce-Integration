@@ -16,7 +16,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>Prompt_count__c</field>
+                <field>PromptCount__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

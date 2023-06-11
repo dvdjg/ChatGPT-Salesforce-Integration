@@ -1,30 +1,56 @@
- <template>
-    <div class="slds-box slds-theme_default">
-        <div class="slds-chat">
-            <ul class="slds-chat-list">
-                <template for:each={conversation} for:item="message">
-                    <li key={message.id} class="slds-chat-listitem slds-m-bottom_small">
-                        <div class={message.containerClass}>
-                            <div class="slds-chat-message__text">
-                                <template lwc:if={message.isBot}>
-                                    <span class={message.textClass}>GPT : {message.text}</span>
-                                </template>
-                                <template lwc:else>
-                                    <span class={message.textClass}>User : {message.text}</span>
-                                </template> 
-                            </div>
-                        </div>
-                    </li>
-                </template>
-            </ul>
+<template>
+    <lightning-card title="IA Conversation" icon-name="standard:contact">
+        <div class="slds-p-around_medium">
+            <span onkeypress={keycheck}>
+                <lightning-combobox name="Conversations" label="Conversations" placeholder="Choose Conversation"
+                    value={strConversation} onchange={handleChangeConversation} options={conversations}>
+                </lightning-combobox>
+            </span>
         </div>
-        <div class="slds-grid slds-grid_align-spread slds-p-top_medium">
-            <div class="slds-col slds-size_10-of-12">
-                <lightning-input type="text" label="Type your message" value={messageInput} onchange={handleChange}></lightning-input>
+        <div class="slds-p-around_medium lgc-bg">
+            <lightning-input type="text" label="Conversation" onchange={handleInputConversationChange}
+                value={strConversation}></lightning-input>
+        </div>
+
+        <div class="slds-box slds-theme_default">
+            <div class="slds-chat">
+                <ul class="slds-chat-list">
+                    <template for:each={conversation} for:item="message">
+                        <li key={message.id} class="slds-chat-listitem slds-m-bottom_small">
+                            <template lwc:if={message.isBot}>
+                                <div class="slds-chat-message slds-chat-listitem_inbound">
+                                    <div class="slds-chat-message__text">
+                                            <span class="slds-chat-message__text slds-chat-message__text_inbound">{message.role} : {message.text}</span>
+                                    </div>
+                                </div>
+                            </template>
+                            <template lwc:else>
+                                <div class="slds-chat-message slds-chat-listitem_outbound user-message">
+                                    <div class="slds-chat-message__text">
+                                            <span class="slds-chat-message__text slds-chat-message__text_outbound">{message.role} : {message.text}</span>
+                                    </div>
+                                </div>
+                            </template>
+                        </li>
+                    </template>
+                </ul>
             </div>
-            <div class="slds-col slds-size_2-of-12 slds-text-align_right slds-align-middle slds-p-top_medium">
-                <lightning-button label="Send" onclick={handleSendMessage} variant="brand"></lightning-button>
+            <div class="slds-grid slds-grid_align-spread slds-p-top_medium">
+                <div class="slds-col slds-size_10-of-12">
+                    <lightning-input type="text" label="Type your message" value={messageInput}
+                        onchange={handleChange}></lightning-input>
+                </div>
+                <div class="slds-col slds-size_2-of-12 slds-text-align_right slds-align-middle slds-p-top_medium">
+                    <lightning-button label="Send" onclick={handleSendMessage} variant="brand"></lightning-button>
+                </div>
             </div>
         </div>
-    </div>
+        <template lwc:if={error}>
+            <div class="slds-var-m-vertical_small">
+                <span class="slds-text-color_destructive">
+                    {error}
+                </span>
+            </div>
+        </template>
+    </lightning-card>
 </template>

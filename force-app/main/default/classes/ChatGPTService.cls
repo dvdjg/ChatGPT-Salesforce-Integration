@@ -19,15 +19,25 @@
  * @author        Jitendra Zaa
  * @email         jitendra.zaa+30@gmail.com
  * @description   Apex class to interact with chat GPT Web Service
- */ 
+ */
+/*
+ sfdx force:source:deploy --sourcepath ./force-app/main/default/classes/ChatGPTService.cls
+ */
 public with sharing class ChatGPTService {
     private static final String MODEL = 'gpt-3.5-turbo';
     private static final Integer IDX_LEN = 5;
+    // private static final String IDX_CONV = 'CV-';
     private static final String IDX_PFX = 'PR-';
 
     public static String generateResponse(String messageText) {
         List<AI_obj_RoleAndContent__c> lst = generateResponse(messageText, 'FieldsFetcher');
         String response = lst.get(lst.size()-1).content__c;
+        return response;
+    }
+
+    @AuraEnabled(cacheable=false)
+    public static List<AI_obj_Conversation__c> getConversations() {
+        List<AI_obj_Conversation__c> response = [SELECT Id, Name, ConversationId__c, PromptCount__c, LastPromptDatetime__c FROM AI_obj_Conversation__c ORDER BY LastPromptDatetime__c DESC];
         return response;
     }
 
@@ -65,7 +75,7 @@ public with sharing class ChatGPTService {
         }
         
         if (!String.isBlank(messageText)) {
-            String response = generateResponse(lstPromptsToQuery); // Callout
+            String response = 'Ok ok: ' + String.valueOf(Datetime.now()); // generateResponse(lstPromptsToQuery); // Callout
             AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0'), role__c = 'assistant', content__c = response);
             lstContents.add(prompt);
             lstContentsToSave.add(prompt);
