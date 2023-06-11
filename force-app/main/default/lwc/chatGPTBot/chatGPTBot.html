@@ -13,25 +13,27 @@
         </div>
 
         <div class="slds-box slds-theme_default">
-            <section role="log" class="slds-chat">
-                <ul class="slds-chat-list">
-                    <template for:each={conversation} for:item="message">
-                        <li key={message.id} class={message.liClass}>
-                            <div class="slds-chat-message">
-                                <div class="slds-chat-message__body">
-                                    <div class={message.messageClass}>
-                                        <span>{message.role}: {message.text}</span>
+            <div class="slds-scrollable_y" style="height:30rem" tabindex="0">
+                <section role="log" class="slds-chat">
+                    <ul class="slds-chat-list">
+                        <template for:each={conversation} for:item="message">
+                            <li key={message.id} class={message.liClass}>
+                                <div class="slds-chat-message">
+                                    <div class="slds-chat-message__body">
+                                        <div class={message.messageClass}>
+                                            <span>{message.text}</span>
+                                        </div>
+                                        <template lwc:if={message.meta}>
+                                            <div class="slds-chat-message__meta" aria-label={message.metaLabel}>
+                                                {message.meta}</div>
+                                        </template>
                                     </div>
-                                    <template lwc:if={message.meta}>
-                                        <div class="slds-chat-message__meta" aria-label={message.metaLabel}>
-                                            {message.meta}</div>
-                                    </template>
                                 </div>
-                            </div>
-                        </li>
-                    </template>
-                </ul>
-            </section>
+                            </li>
+                        </template>
+                    </ul>
+                </section>
+            </div>
             <div class="slds-grid slds-grid_align-spread slds-p-top_medium">
                 <div class="slds-col slds-size_10-of-12">
                     <span onkeypress={keyCheckMessage}>

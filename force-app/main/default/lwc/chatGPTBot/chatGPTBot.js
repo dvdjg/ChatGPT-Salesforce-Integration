@@ -128,7 +128,7 @@ export default class ChatGPTBot extends LightningElement {
                     minute: 'numeric',
                     second: 'numeric',
                   };
-                const meta = (isBot ? 'GPT' : r.CreatedBy.Name) + ' • ' + created.toLocaleDateString("es-ES", options);
+                const meta = (isBot ? 'GPT ('+r.role__c+')' : r.CreatedBy?.Name ? r.CreatedBy.Name : 'USER') + ' • ' + created.toLocaleDateString("es-ES", options);
                 return {
                     id: r.Id,
                     role: r.role__c,
@@ -140,6 +140,8 @@ export default class ChatGPTBot extends LightningElement {
                     meta
                 }
             });
+            const scrollArea = this.template.querySelector('.slds-scrollable_y');
+            scrollArea.scrollTop = scrollArea.scrollHeight;
             this.error = undefined;
         } catch (error) {
             console.error('Error generating ChatGPT response: ', error);
