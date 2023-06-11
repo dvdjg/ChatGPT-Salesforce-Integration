@@ -29,9 +29,17 @@
     <tabs>standard-Order</tabs>
     <tabs>standard-Product2</tabs>
     <tabs>standard-Pricebook2</tabs>
+    <tabs>AI_obj_Conversation__c</tabs>
+    <tabs>AI_obj_RoleAndContent__c</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>Salesforce_AI_UtilityBar</utilityBar>
     <workspaceConfig>
+        <mappings>
+            <tab>AI_obj_Conversation__c</tab>
+        </mappings>
+        <mappings>
+            <tab>AI_obj_RoleAndContent__c</tab>
+        </mappings>
         <mappings>
             <tab>standard-Account</tab>
         </mappings>

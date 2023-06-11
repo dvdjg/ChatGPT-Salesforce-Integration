@@ -20,9 +20,11 @@
     </types>
     <types>
         <members>AI_obj_Conversation__c.ConversationId__c</members>
+        <members>AI_obj_Conversation__c.LastPromptDatetime__c</members>
         <members>AI_obj_Conversation__c.PromptCount__c</members>
         <members>AI_obj_RoleAndContent__c.content__c</members>
         <members>AI_obj_RoleAndContent__c.conversation__c</members>
+        <members>AI_obj_RoleAndContent__c.ConversationIdentifier__c</members>
         <members>AI_obj_RoleAndContent__c.role__c</members>
         <members>OpenAI_Config__mdt.api_key__c</members>
         <members>OpenAI_Config__mdt.endpoint__c</members>
