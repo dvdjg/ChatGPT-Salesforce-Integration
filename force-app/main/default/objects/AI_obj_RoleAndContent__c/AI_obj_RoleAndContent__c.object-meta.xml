@@ -155,7 +155,7 @@
     <externalSharingModel>ControlledByParent</externalSharingModel>
     <label>AI Role And Content</label>
     <nameField>
-        <label>AI RoleAndContent Name</label>
+        <label>Name</label>
         <type>Text</type>
     </nameField>
     <pluralLabel>AI Roles And Contents</pluralLabel>

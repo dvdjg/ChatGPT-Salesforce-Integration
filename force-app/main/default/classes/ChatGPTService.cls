@@ -21,9 +21,9 @@
  * @description   Apex class to interact with chat GPT Web Service
  */ 
 public with sharing class ChatGPTService {
-    //private static final String API_KEY = System.label.chatGPTAPIKey; // Replace with your actual API key
-    //private static final String ENDPOINT_URL = 'https://api.openai.com/v1/chat/completions';
     private static final String MODEL = 'gpt-3.5-turbo';
+    private static final Integer IDX_LEN = 5;
+    private static final String IDX_PFX = 'PR-';
 
     public static String generateResponse(String messageText) {
         List<AI_obj_RoleAndContent__c> lst = generateResponse(messageText, 'FieldsFetcher');
@@ -39,13 +39,14 @@ public with sharing class ChatGPTService {
 
         List<AI_obj_RoleAndContent__c> lstContentsToSave = new List<AI_obj_RoleAndContent__c>();
         List<AI_obj_RoleAndContent__c> lstContents = [SELECT Id, Name, role__c, content__c, conversation__r.Id FROM AI_obj_RoleAndContent__c WHERE conversation__r.ConversationId__c=:conversationName ORDER BY CreatedDate ASC];
-
+        
         List<Object> lstPromptsToQuery = new List<Object>();
         Id conversationId;
-        Boolean noContents = lstContents.size() == 0;
+        Integer idxContent = lstContents.size();
+        Boolean noContents = idxContent == 0;
 
         if (noContents) {
-            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = 'system', role__c = 'system', content__c = 'You are a helpful assistant.');
+            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0'), role__c = 'system', content__c = 'You are a helpful assistant.');
             lstContents.add(prompt);
             lstContentsToSave.add(prompt);
         } else {
@@ -53,7 +54,7 @@ public with sharing class ChatGPTService {
         }
 
         if (!String.isBlank(messageText)) {
-            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = 'user', role__c = 'user', content__c = messageText);
+            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0'), role__c = 'user', content__c = messageText);
             lstContents.add(prompt);
             lstContentsToSave.add(prompt);
         }
@@ -64,11 +65,13 @@ public with sharing class ChatGPTService {
         }
         
         if (!String.isBlank(messageText)) {
-            String response = generateResponse(lstPromptsToQuery);
-            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = 'assistant', role__c = 'assistant', content__c = response);
+            String response = generateResponse(lstPromptsToQuery); // Callout
+            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0'), role__c = 'assistant', content__c = response);
             lstContents.add(prompt);
             lstContentsToSave.add(prompt);
         }
+
+        // Do DML after the callout.
 
         if (noContents) {
             AI_obj_Conversation__c conversation = new AI_obj_Conversation__c(Name = conversationName, ConversationId__c = conversationName);
