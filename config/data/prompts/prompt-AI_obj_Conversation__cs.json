@@ -1,0 +1,28 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "AI_obj_Conversation__c",
+                "referenceId": "AI_obj_Conversation__cRef1"
+            },
+            "Name": "FirstContact",
+            "ConversationId__c": "FirstContact"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_Conversation__c",
+                "referenceId": "AI_obj_Conversation__cRef2"
+            },
+            "Name": "First",
+            "ConversationId__c": "First"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_Conversation__c",
+                "referenceId": "AI_obj_Conversation__cRef3"
+            },
+            "Name": "FirstContact2",
+            "ConversationId__c": "FirstContact2"
+        }
+    ]
+}

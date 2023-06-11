@@ -1,0 +1,174 @@
+{
+    "records": [
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef1"
+            },
+            "Name": "system",
+            "role__c": "system",
+            "content__c": "You are a helpful assistant.",
+            "conversation__c": "@AI_obj_Conversation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef2"
+            },
+            "Name": "user",
+            "role__c": "user",
+            "content__c": "Who was Gauss?",
+            "conversation__c": "@AI_obj_Conversation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef3"
+            },
+            "Name": "PR-00006",
+            "role__c": "assistant",
+            "content__c": "Sir Isaac Newton was an English mathematician, physicist, and astronomer who lived from 1642 to 1727. He is widely regarded as one of the most influential scientists in history, and his work laid the foundation for much of modern physics and mathematics. Newton developed the laws of motion and the law of universal gravitation, which describe the behavior of objects in motion and the force between them. His formulation of calculus was also a significant achievement, and it remains a fundamental mathematical tool for solving problems in physics, engineering, and other fields. Newton’s work had a remarkable impact on the scientific revolution of the 17th century and paved the way for many of the breakthroughs that followed.",
+            "conversation__c": "@AI_obj_Conversation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef4"
+            },
+            "Name": "PR-00005",
+            "role__c": "user",
+            "content__c": "And Newton?",
+            "conversation__c": "@AI_obj_Conversation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef5"
+            },
+            "Name": "PR-00008",
+            "role__c": "assistant",
+            "content__c": "Ok ok: 2023-06-11 13:58:42",
+            "conversation__c": "@AI_obj_Conversation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef6"
+            },
+            "Name": "PR-00007",
+            "role__c": "user",
+            "content__c": "we",
+            "conversation__c": "@AI_obj_Conversation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef7"
+            },
+            "Name": "assistant",
+            "role__c": "assistant",
+            "content__c": "Leonhard Euler was a Swiss mathematician, physicist, and engineer who lived from 1707 to 1783. He is widely regarded as one of the most influential mathematicians in history, and is known for his numerous contributions to many areas of mathematics, including calculus, graph theory, number theory, and algebra. Among his many accomplishments, Euler developed the modern notation for mathematical functions such as sine and cosine, and made important discoveries in the areas of infinite series and mathematical analysis. He is also known for his work on the Basel problem, which involved finding the sum of the infinite series of reciprocal squares, and for his contributions to the study of complex numbers, including the discovery of Euler's formula, which relates complex exponentials to trigonometric functions.",
+            "conversation__c": "@AI_obj_Conversation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef8"
+            },
+            "Name": "assistant",
+            "role__c": "assistant",
+            "content__c": "Johann Carl Friedrich Gauss (often referred to as Carl Friedrich Gauss) was a German mathematician and physicist who lived from 1777 to 1855. He is considered one of the greatest mathematicians of all time and contributed significantly to fields such as number theory, algebra, statistics, and astronomy. Gauss made important discoveries throughout his life, including the Gaussian distribution (also known as the normal distribution), the fundamental theorem of algebra, and the method of least squares. He is also credited with developing the method of modularity, which led to the creation of modular arithmetic and the study of mathematical structures known as modular forms.",
+            "conversation__c": "@AI_obj_Conversation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef9"
+            },
+            "Name": "PR-00009",
+            "role__c": "user",
+            "content__c": "dsds",
+            "conversation__c": "@AI_obj_Conversation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef10"
+            },
+            "Name": "PR-00010",
+            "role__c": "assistant",
+            "content__c": "Ok ok: 2023-06-11 15:41:55",
+            "conversation__c": "@AI_obj_Conversation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef11"
+            },
+            "Name": "user",
+            "role__c": "user",
+            "content__c": "And Euler?",
+            "conversation__c": "@AI_obj_Conversation__cRef1"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef12"
+            },
+            "Name": "PR-00000",
+            "role__c": "system",
+            "content__c": "You are a helpful assistant.",
+            "conversation__c": "@AI_obj_Conversation__cRef2"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef13"
+            },
+            "Name": "PR-00001",
+            "role__c": "user",
+            "content__c": "popo",
+            "conversation__c": "@AI_obj_Conversation__cRef3"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef14"
+            },
+            "Name": "PR-00000",
+            "role__c": "system",
+            "content__c": "You are a helpful assistant.",
+            "conversation__c": "@AI_obj_Conversation__cRef3"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef15"
+            },
+            "Name": "PR-00004",
+            "role__c": "assistant",
+            "content__c": "Ok ok: 2023-06-11 14:18:59",
+            "conversation__c": "@AI_obj_Conversation__cRef3"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef16"
+            },
+            "Name": "PR-00003",
+            "role__c": "user",
+            "content__c": "gfgf",
+            "conversation__c": "@AI_obj_Conversation__cRef3"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef17"
+            },
+            "Name": "PR-00002",
+            "role__c": "assistant",
+            "content__c": "Ok ok: 2023-06-11 14:14:51",
+            "conversation__c": "@AI_obj_Conversation__cRef3"
+        }
+    ]
+}
