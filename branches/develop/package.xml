@@ -19,7 +19,7 @@
         <name>CustomApplication</name>
     </types>
     <types>
-        <members>AI_obj_Conversation__c.ConversationId__c</members>
+        <members>AI_obj_Conversation__c.ExternalId__c</members>
         <members>AI_obj_Conversation__c.LastPromptDatetime__c</members>
         <members>AI_obj_Conversation__c.PromptCount__c</members>
         <members>AI_obj_RoleAndContent__c.content__c</members>

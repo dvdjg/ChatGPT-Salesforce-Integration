@@ -12,7 +12,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Required</behavior>
-                <field>ConversationId__c</field>
+                <field>ExternalId__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>

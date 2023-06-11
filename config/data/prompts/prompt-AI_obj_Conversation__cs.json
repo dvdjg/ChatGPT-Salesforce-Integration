@@ -6,7 +6,7 @@
                 "referenceId": "AI_obj_Conversation__cRef1"
             },
             "Name": "FirstContact",
-            "ConversationId__c": "FirstContact"
+            "ExternalId__c": "FirstContact"
         },
         {
             "attributes": {
@@ -14,7 +14,7 @@
                 "referenceId": "AI_obj_Conversation__cRef2"
             },
             "Name": "First",
-            "ConversationId__c": "First"
+            "ExternalId__c": "First"
         },
         {
             "attributes": {
@@ -22,7 +22,7 @@
                 "referenceId": "AI_obj_Conversation__cRef3"
             },
             "Name": "FirstContact2",
-            "ConversationId__c": "FirstContact2"
+            "ExternalId__c": "FirstContact2"
         }
     ]
 }

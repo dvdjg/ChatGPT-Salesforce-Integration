@@ -37,7 +37,7 @@ public with sharing class ChatGPTService {
 
     @AuraEnabled(cacheable=false)
     public static List<AI_obj_Conversation__c> getConversations() {
-        List<AI_obj_Conversation__c> response = [SELECT Id, Name, ConversationId__c, PromptCount__c, LastPromptDatetime__c FROM AI_obj_Conversation__c ORDER BY LastPromptDatetime__c DESC];
+        List<AI_obj_Conversation__c> response = [SELECT Id, Name, ExternalId__c, PromptCount__c, LastPromptDatetime__c FROM AI_obj_Conversation__c ORDER BY LastPromptDatetime__c DESC];
         return response;
     }
 
@@ -49,7 +49,7 @@ public with sharing class ChatGPTService {
 
         List<AI_obj_RoleAndContent__c> lstContentsToSave = new List<AI_obj_RoleAndContent__c>();
         List<AI_obj_RoleAndContent__c> lstContents = [
-            SELECT Id, Name, role__c, content__c, conversation__r.Id, CreatedBy.Name, CreatedDate FROM AI_obj_RoleAndContent__c WHERE conversation__r.ConversationId__c=:conversationName ORDER BY CreatedDate ASC
+            SELECT Id, Name, role__c, content__c, conversation__r.Id, CreatedBy.Name, CreatedDate FROM AI_obj_RoleAndContent__c WHERE conversation__r.ExternalId__c=:conversationName ORDER BY CreatedDate ASC
             ];
         
         List<Object> lstPromptsToQuery = new List<Object>();
@@ -86,8 +86,8 @@ public with sharing class ChatGPTService {
         // Do DML after the callout.
 
         if (noContents) {
-            AI_obj_Conversation__c conversation = new AI_obj_Conversation__c(Name = conversationName, ConversationId__c = conversationName);
-            upsert conversation ConversationId__c;
+            AI_obj_Conversation__c conversation = new AI_obj_Conversation__c(Name = conversationName, ExternalId__c = conversationName);
+            upsert conversation ExternalId__c;
             conversationId = conversation.Id;
         }
 

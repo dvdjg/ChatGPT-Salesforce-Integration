@@ -76,8 +76,8 @@ export default class ChatGPTBot extends LightningElement {
             const data = await getConversations();
             this.conversations = data.map((r, i) => (
                 {
-                    value: r.ConversationId__c,
-                    label: r.ConversationId__c,
+                    value: r.ExternalId__c,
+                    label: r.ExternalId__c,
                     description: r.Name + ' (' + r.PromptCount__c + ')',
                 }
             ));
