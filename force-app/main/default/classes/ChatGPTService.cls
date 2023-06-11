@@ -49,7 +49,7 @@ public with sharing class ChatGPTService {
 
         List<AI_obj_RoleAndContent__c> lstContentsToSave = new List<AI_obj_RoleAndContent__c>();
         List<AI_obj_RoleAndContent__c> lstContents = [
-            SELECT Id, Name, role__c, content__c, conversation__r.Id, CreatedBy.Name, CreatedDate FROM AI_obj_RoleAndContent__c WHERE conversation__r.ExternalId__c=:conversationName ORDER BY CreatedDate ASC
+            SELECT Id, Name, role__c, content__c, conversation__r.Id, CreatedBy.Name, CreatedDate FROM AI_obj_RoleAndContent__c WHERE conversation__r.ExternalId__c=:conversationName ORDER BY Name, CreatedDate ASC
             ];
         
         List<Object> lstPromptsToQuery = new List<Object>();
@@ -58,7 +58,8 @@ public with sharing class ChatGPTService {
         Boolean noContents = idxContent == 0;
 
         if (noContents) {
-            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0'), role__c = 'system', content__c = 'You are a helpful assistant.');
+            String name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
+            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'system', content__c = 'You are a helpful assistant.');
             lstContents.add(prompt);
             lstContentsToSave.add(prompt);
         } else {
@@ -66,7 +67,8 @@ public with sharing class ChatGPTService {
         }
 
         if (!String.isBlank(messageText)) {
-            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0'), role__c = 'user', content__c = messageText);
+            String name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
+            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'user', content__c = messageText);
             lstContents.add(prompt);
             lstContentsToSave.add(prompt);
         }
@@ -78,7 +80,8 @@ public with sharing class ChatGPTService {
         
         if (!String.isBlank(messageText)) {
             String response = 'Ok ok: ' + String.valueOf(Datetime.now()); // generateResponse(lstPromptsToQuery); // Callout
-            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0'), role__c = 'assistant', content__c = response);
+            String name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
+            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'assistant', content__c = response);
             lstContents.add(prompt);
             lstContentsToSave.add(prompt);
         }

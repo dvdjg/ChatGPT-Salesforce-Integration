@@ -116,9 +116,10 @@ export default class ChatGPTBot extends LightningElement {
         try {
             const chatGPTResponses = await generateResponse({ messageText: messageInput, conversationName });
             conversation = chatGPTResponses.map((r, i) => {
-                const created = new Date(r.CreatedDate);
                 const isBot = r.role__c != 'user';
                 const type = r.role__c != 'user' ? 'inbound' : 'outbound'; // 'inbound', 'outbound', 'event', 'bookend';
+                let strDate;
+                const created = r.CreatedDate ? new Date(r.CreatedDate) : new Date();
                 const options = {
                     weekday: "long",
                     year: "numeric",
@@ -128,7 +129,8 @@ export default class ChatGPTBot extends LightningElement {
                     minute: 'numeric',
                     second: 'numeric',
                   };
-                const meta = (isBot ? 'GPT ('+r.role__c+')' : r.CreatedBy?.Name ? r.CreatedBy.Name : 'USER') + ' • ' + created.toLocaleDateString("es-ES", options);
+                strDate = created.toLocaleDateString("es-ES", options);
+                const meta = (isBot ? 'GPT ('+r.role__c+')' : r.CreatedBy?.Name ? r.CreatedBy.Name : 'USER') + ' • ' + strDate + ' • ' + r.Name;
                 return {
                     id: r.Id,
                     role: r.role__c,
