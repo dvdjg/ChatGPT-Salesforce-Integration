@@ -1,15 +1,15 @@
 <template>
     <lightning-card title="IA Conversation" icon-name="standard:contact">
         <div class="slds-p-around_medium">
-            <span onkeypress={keycheck}>
-                <lightning-combobox name="Conversations" label="Conversations" placeholder="Choose Conversation"
-                    value={strConversation} onchange={handleChangeConversation} options={conversations}>
-                </lightning-combobox>
-            </span>
+            <lightning-combobox name="Conversations" label="Conversations" placeholder="Choose Conversation"
+                value={strConversation} onchange={handleChangeConversation} options={conversations}>
+            </lightning-combobox>
         </div>
         <div class="slds-p-around_medium lgc-bg">
-            <lightning-input type="text" label="Conversation" onchange={handleInputConversationChange}
-                value={strConversation}></lightning-input>
+            <span onkeypress={keyCheckConversation}>
+                <lightning-input type="text" label="Conversation" onchange={handleInputConversationChange}
+                    value={strConversation}></lightning-input>
+            </span>
         </div>
 
         <div class="slds-box slds-theme_default">
@@ -20,14 +20,18 @@
                             <template lwc:if={message.isBot}>
                                 <div class="slds-chat-message slds-chat-listitem_inbound">
                                     <div class="slds-chat-message__text">
-                                            <span class="slds-chat-message__text slds-chat-message__text_inbound">{message.role} : {message.text}</span>
+                                        <span
+                                            class="slds-chat-message__text slds-chat-message__text_inbound">{message.role}
+                                            : {message.text}</span>
                                     </div>
                                 </div>
                             </template>
                             <template lwc:else>
                                 <div class="slds-chat-message slds-chat-listitem_outbound user-message">
                                     <div class="slds-chat-message__text">
-                                            <span class="slds-chat-message__text slds-chat-message__text_outbound">{message.role} : {message.text}</span>
+                                        <span
+                                            class="slds-chat-message__text slds-chat-message__text_outbound">{message.role}
+                                            : {message.text}</span>
                                     </div>
                                 </div>
                             </template>
@@ -37,8 +41,10 @@
             </div>
             <div class="slds-grid slds-grid_align-spread slds-p-top_medium">
                 <div class="slds-col slds-size_10-of-12">
-                    <lightning-input type="text" label="Type your message" value={messageInput}
-                        onchange={handleChange}></lightning-input>
+                    <span onkeypress={keyCheckMessage}>
+                        <lightning-input type="text" label="Type your message" value={messageInput}
+                            onchange={handleChange}></lightning-input>
+                    </span>
                 </div>
                 <div class="slds-col slds-size_2-of-12 slds-text-align_right slds-align-middle slds-p-top_medium">
                     <lightning-button label="Send" onclick={handleSendMessage} variant="brand"></lightning-button>

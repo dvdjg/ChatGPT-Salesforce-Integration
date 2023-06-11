@@ -18,6 +18,10 @@
                 <behavior>Readonly</behavior>
                 <field>PromptCount__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>LastPromptDatetime__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
