@@ -119,7 +119,16 @@ export default class ChatGPTBot extends LightningElement {
                 const created = new Date(r.CreatedDate);
                 const isBot = r.role__c != 'user';
                 const type = r.role__c != 'user' ? 'inbound' : 'outbound'; // 'inbound', 'outbound', 'event', 'bookend';
-                const meta = (isBot ? 'GPT' : r.CreatedBy.Name) + ' • ' + created.toString();
+                const options = {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    second: 'numeric',
+                  };
+                const meta = (isBot ? 'GPT' : r.CreatedBy.Name) + ' • ' + created.toLocaleDateString("es-ES", options);
                 return {
                     id: r.Id,
                     role: r.role__c,
