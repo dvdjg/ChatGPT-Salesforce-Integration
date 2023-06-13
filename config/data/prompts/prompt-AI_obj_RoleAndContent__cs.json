@@ -169,6 +169,656 @@
             "role__c": "assistant",
             "content__c": "Ok ok: 2023-06-11 14:14:51",
             "conversation__c": "@AI_obj_Conversation__cRef3"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef18"
+            },
+            "Name": "PR-00054",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"Actualmente, Paulova no tiene oportunidades ganadas.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef19"
+            },
+            "Name": "PR-00055",
+            "role__c": "user",
+            "content__c": "Busca la cuenta con más oportunidades ganadas",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef20"
+            },
+            "Name": "PR-00056",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT AccountId, Account.Name, COUNT(Id) FROM Opportunity WHERE StageName = 'Closed Won' GROUP BY AccountId, Account.Name ORDER BY COUNT(Id) DESC LIMIT 1\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef21"
+            },
+            "Name": "PR-00000",
+            "role__c": "system",
+            "content__c": "You act as the middleman between USER and a DATABASE. Your main goal is to answer questions based on data stored in a Salesforce CRM database (SERVER). You do this by executing valid queries against the database and interpreting the results to answer the questions from the USER.",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef22"
+            },
+            "Name": "PR-00001",
+            "role__c": "user",
+            "content__c": "From now you will only ever respond with JSON. When you want to address the user, you use the following format {\"recipient\": \"USER\", \"message\":\"message for the user\"}.",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef23"
+            },
+            "Name": "PR-00002",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"I understand.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef24"
+            },
+            "Name": "PR-00003",
+            "role__c": "user",
+            "content__c": "You can access Salesforce by using the SERVER recipient. When calling the server, you must also specify an action. The action can be QUERY when you want to query the database with a SOQL, or APEX  when you want to run a piece of APEX code. User will return the content of the variable 'result' if defined. The format you will use for an insert operation returning its Id is as follows {\"recipient\":\"SERVER\", \"action\":\"APEX\", \"message\":\"Account acc = new Account(Name = 'Acme Corp.'); insert acc; Id result = acc.Id;\"}. The format you will use for an upsert operation is as follows {\"recipient\":\"SERVER\", \"action\":\"APEX\", \"message\":\"LEAD l = new Lead(LastName = 'testLead', Company = 'testCompany', ExternalId__c = 'NUM-0001') ExternalId__c; upsert l; Id result = l.Id;\"}. The format you will use for query uses SOQL as follows: {\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT Id, CaseNumber, Subject, Description, Status, CreatedDate FROM Case WHERE CaseNumber = '00001002'\"}. When a successfull QUERY is performed, the data will be returned by the user.",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef25"
+            },
+            "Name": "PR-00004",
+            "role__c": "user",
+            "content__c": "Let's start! I want to know all the cases for a contact identified by its Email asong@uog.com or Phone (212) 842-5500 , in the last year.",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef26"
+            },
+            "Name": "PR-00005",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT Id, CaseNumber, Status, Priority, Origin, Subject, Description, CreatedDate, Contact.Name FROM Case WHERE (Contact.Email = 'asong@uog.com' OR Contact.Phone = '(212) 842-5500') AND CreatedDate >= LAST_N_DAYS:365\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef27"
+            },
+            "Name": "PR-00006",
+            "role__c": "user",
+            "content__c": "\"Id\",\"CaseNumber\",\"Status\",\"Priority\",\"Origin\",\"Subject\",\"Description\",\"CreatedDate\",\"Contact.Name\"\n\"5007R00003XpYf8QAF\",\"00001001\",\"Closed\",\"High\",\"Phone\",\"Performance inadequate for second consecutive week\",\"\",\"2023-05-23T15:04:02.000+0000\",\"Avi Green\"\n\"5007R00003XpYf9QAF\",\"00001002\",\"New\",\"Low\",\"Web\",\"Seeking guidance on electrical wiring installation for GC5060\",\"\",\"2023-05-23T15:04:02.000+0000\",\"Stella Pavlova\"\n\"5007R00003XpYfSQAV\",\"00001021\",\"Closed\",\"High\",\"Phone\",\"Generator GC3060 platform structure is weakening\",\"\",\"2023-05-23T15:04:02.000+0000\",\"Stella Pavlova\"\n\"5007R00003XpYfTQAV\",\"00001022\",\"Closed\",\"Medium\",\"Web\",\"Signal panel on GC5060 blinks intermittently\",\"\",\"2023-05-23T15:04:02.000+0000\",\"Stella Pavlova\"\n\"5007R00003XpYfUQAV\",\"00001023\",\"Closed\",\"High\",\"Phone\",\"Electric surge damaging adjacent equipment\",\"\",\"2023-05-23T15:04:02.000+0000\",\"Stella Pavlova\"\n\"5007R00003XpYfVQAV\",\"00001024\",\"New\",\"Low\",\"Web\",\"Design issue with mechanical rotor\",\"\",\"2023-05-23T15:04:02.000+0000\",\"Lauren Boyle\"\n\"5007R00003XpYfWQAV\",\"00001025\",\"Closed\",\"Medium\",\"Phone\",\"Motor design hindering performance\",\"\",\"2023-05-23T15:04:02.000+0000\",\"Lauren Boyle\"",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef28"
+            },
+            "Name": "PR-00007",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"I found seven Cases.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef29"
+            },
+            "Name": "PR-00008",
+            "role__c": "user",
+            "content__c": "Tell me the ones you find with the status New.",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef30"
+            },
+            "Name": "PR-00009",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"I found one Case with number 00001002. It was created on May 23, 2023, at 15:04 with the subject 'Seeking guidance on electrical wiring installation for GC5060'.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef31"
+            },
+            "Name": "PR-00010",
+            "role__c": "user",
+            "content__c": "Thanks!. Please give me the case description.",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef32"
+            },
+            "Name": "PR-00011",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"The case 00001002 has no description. Would you like more information about the case?\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef33"
+            },
+            "Name": "PR-00012",
+            "role__c": "user",
+            "content__c": "Yes!. Give me contact and account information related to this case.",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef34"
+            },
+            "Name": "PR-00013",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT Id, Contact.Id, Contact.Name, Contact.Email, Contact.Phone, Account.Id, Account.Name, Account.BillingAddress FROM Case WHERE CaseNumber = '00001002'\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef35"
+            },
+            "Name": "PR-00057",
+            "role__c": "user",
+            "content__c": "\"AccountId\",\"Name\",\"expr0\"\n\"0017R00002wgqvxQAA\",\"United Oil & Gas Corp.\",\"6\"",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef36"
+            },
+            "Name": "PR-00058",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"La cuenta con más oportunidades ganadas es United Oil & Gas Corp. con un total de 6 oportunidades ganadas.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef37"
+            },
+            "Name": "PR-00059",
+            "role__c": "user",
+            "content__c": "¿Quiénes son sus contactos?",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef38"
+            },
+            "Name": "PR-00060",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT Id, Name, Email, Phone FROM Contact WHERE AccountId = '0017R00002wgqvxQAA'\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef39"
+            },
+            "Name": "PR-00061",
+            "role__c": "user",
+            "content__c": "\"Id\",\"Name\",\"Email\",\"Phone\"\n\"0037R00003JDJo7QAH\",\"Stella Paulova\",\"spavlova@uog.com\",\"(212) 842-5500\"\n\"0037R00003JDJo8QAH\",\"Lauren Boyle\",\"lboyle@uog.com\",\"(212) 842-5500\"\n\"0037R00003JDJoCQAX\",\"Arthur Song\",\"asong@uog.com\",\"(212) 842-5500\"\n\"0037R00003JDJoHQAX\",\"Avi Green\",\"agreen@uog.com\",\"(212) 842-5500\"",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef40"
+            },
+            "Name": "PR-00062",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"Los contactos asociados a United Oil & Gas Corp. son Stella Paulova, Lauren Boyle, Arthur Song y Avi Green.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef41"
+            },
+            "Name": "PR-00014",
+            "role__c": "user",
+            "content__c": "Id,Contact.Id,Contact.Name,Contact.Email,Contact.Phone,Account.Id,Account.Name,Account.BillingAddress.city,Account.BillingAddress.country,Account.BillingAddress.geocodeAccuracy,Account.BillingAddress.latitude,Account.BillingAddress.longitude,Account.BillingAddress.postalCode,Account.BillingAddress.state,Account.BillingAddress.street\n5007R00003XpYf9QAF,0037R00003JDJo7QAH,Stella Pavlova,spavlova@uog.com,(212) 842-5500,0017R00002wgqvxQAA,United Oil & Gas Corp.,New York,,,,,,NY,\"1301 Avenue of the Americas New York, NY 10019 USA\"",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef42"
+            },
+            "Name": "PR-00015",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"The case belongs to Stella Pavlova. She can be reached via email at spavlova@uog.com or by phone at (212) 842-5500. Stella is associated with an account named United Oil & Gas Corp. The account is located at 1301 Avenue of the Americas in New York, with a ZIP code of 10019.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef43"
+            },
+            "Name": "PR-00016",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"Is there anything else I can help you with?\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef44"
+            },
+            "Name": "PR-00017",
+            "role__c": "user",
+            "content__c": "please, modify the Stella surname. It is Paulova.",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef45"
+            },
+            "Name": "PR-00018",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\":\"SERVER\", \"action\":\"APEX\", \"message\":\"Case caseToUpdate = [SELECT Id, ContactId FROM Case WHERE CaseNumber = '00001002']; Contact contactToUpdate = new Contact(Id = caseToUpdate.ContactId, LastName = 'Paulova'); update contactToUpdate; Id result = contactToUpdate.Id;\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef46"
+            },
+            "Name": "PR-00019",
+            "role__c": "user",
+            "content__c": "0037R00003JDJo7QAH",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef47"
+            },
+            "Name": "PR-00020",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"The contact's last name has been updated to 'Paulova'.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef48"
+            },
+            "Name": "PR-00021",
+            "role__c": "user",
+            "content__c": "Put a case comment with the text \"Paulova is the best!\"",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef49"
+            },
+            "Name": "PR-00022",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\":\"SERVER\", \"action\":\"APEX\", \"message\":\"CaseComment comment = new CaseComment(ParentId = '5007R00003XpYf9QAF', CommentBody = 'Paulova is the best!'); insert comment; Id result = comment.Id;\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef50"
+            },
+            "Name": "PR-00023",
+            "role__c": "user",
+            "content__c": "00a7R00001NVyyGQAT",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef51"
+            },
+            "Name": "PR-00024",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"A comment has been added to the case.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef52"
+            },
+            "Name": "PR-00025",
+            "role__c": "user",
+            "content__c": "Add a feed item to the case with the same text.",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef53"
+            },
+            "Name": "PR-00026",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\":\"SERVER\", \"action\":\"APEX\", \"message\":\"FeedItem post = new FeedItem(ParentId = '5007R00003XpYf9QAF', Body = 'Paulova is the best!'); insert post; Id result = post.Id;\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef54"
+            },
+            "Name": "PR-00027",
+            "role__c": "user",
+            "content__c": "0D57R0000Bwrh2RSQQ",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef55"
+            },
+            "Name": "PR-00028",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"A feed item has been added to the case.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef56"
+            },
+            "Name": "PR-00029",
+            "role__c": "user",
+            "content__c": "¿Te puedo preguntar en español?",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef57"
+            },
+            "Name": "PR-00030",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"¡Por supuesto! Estoy aquí para ayudarte en lo que necesites.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef58"
+            },
+            "Name": "PR-00031",
+            "role__c": "user",
+            "content__c": "¿Cuántos casos tiene abiertos Paulova?",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef59"
+            },
+            "Name": "PR-00032",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT COUNT(Id) FROM Case WHERE ContactId = '0037R00003JDJo7QAH' AND IsClosed = false\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef60"
+            },
+            "Name": "PR-00033",
+            "role__c": "user",
+            "content__c": "1",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef61"
+            },
+            "Name": "PR-00034",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"Actualmente, Paulova tiene 1 caso abierto.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef62"
+            },
+            "Name": "PR-00035",
+            "role__c": "user",
+            "content__c": "¿Cuántos casos tiene cerrados Paulova?",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef63"
+            },
+            "Name": "PR-00036",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT COUNT(Id) FROM Case WHERE ContactId = '0037R00003JDJo7QAH' AND IsClosed = true\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef64"
+            },
+            "Name": "PR-00037",
+            "role__c": "user",
+            "content__c": "3",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef65"
+            },
+            "Name": "PR-00038",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"Paulova tiene 3 casos cerrados.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef66"
+            },
+            "Name": "PR-00039",
+            "role__c": "user",
+            "content__c": "¿Cuál es el caso de Paulova que se ha cerrado más recientemente?",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef67"
+            },
+            "Name": "PR-00040",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT Id, CaseNumber, Status, Priority, Origin, Subject, Description, CreatedDate, ClosedDate FROM Case WHERE ContactId = '0037R00003JDJo7QAH' AND IsClosed = true ORDER BY ClosedDate DESC LIMIT 1\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef68"
+            },
+            "Name": "PR-00041",
+            "role__c": "user",
+            "content__c": "\"Id\",\"CaseNumber\",\"Status\",\"Priority\",\"Origin\",\"Subject\",\"Description\",\"CreatedDate\",\"ClosedDate\"\n\"5007R00003XpYfSQAV\",\"00001021\",\"Closed\",\"High\",\"Phone\",\"Generator GC3060 platform structure is weakening\",\"\",\"2023-05-23T15:04:02.000+0000\",\"2015-07-28T18:59:51.000+0000\"",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef69"
+            },
+            "Name": "PR-00042",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"El caso más reciente cerrado de Paulova es el número 00001021. Fue cerrado el 28 de julio de 2015 y su asunto es 'Generator GC3060 platform structure is weakening'.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef70"
+            },
+            "Name": "PR-00043",
+            "role__c": "user",
+            "content__c": "¿A qué hora fue cerrado?",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef71"
+            },
+            "Name": "PR-00044",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"El caso 00001021 fue cerrado a las 18:59:51 UTC.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef72"
+            },
+            "Name": "PR-00045",
+            "role__c": "user",
+            "content__c": "Y en el horario de Madrid?",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef73"
+            },
+            "Name": "PR-00046",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"Madrid está 2 horas adelantado de UTC en verano, por lo que la hora local de Madrid sería las 20:59:51.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef74"
+            },
+            "Name": "PR-00047",
+            "role__c": "user",
+            "content__c": "Y en Islas Canarias?",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef75"
+            },
+            "Name": "PR-00048",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"Las Islas Canarias están 1 hora detrás de la hora de Madrid en verano, por lo que la hora local en las Islas Canarias sería las 19:59:51.\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef76"
+            },
+            "Name": "PR-00049",
+            "role__c": "user",
+            "content__c": "Cuántas oportunidades ganadas tiene?",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef77"
+            },
+            "Name": "PR-00050",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\": \"USER\", \"message\":\"¿El sistema o Paulova?\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef78"
+            },
+            "Name": "PR-00051",
+            "role__c": "user",
+            "content__c": "Paulova",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef79"
+            },
+            "Name": "PR-00052",
+            "role__c": "assistant",
+            "content__c": "{\"recipient\":\"SERVER\", \"action\":\"QUERY\", \"message\":\"SELECT COUNT(Id) FROM Opportunity WHERE Contact__c = '0037R00003JDJo7QAH' AND StageName = 'Closed Won'\"}",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef80"
+            },
+            "Name": "PR-00053",
+            "role__c": "user",
+            "content__c": "0",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef81"
+            },
+            "Name": "PR-00063",
+            "role__c": "user",
+            "content__c": "lista todos los contactos",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
+        },
+        {
+            "attributes": {
+                "type": "AI_obj_RoleAndContent__c",
+                "referenceId": "AI_obj_RoleAndContent__cRef82"
+            },
+            "Name": "PR-00064",
+            "role__c": "assistant",
+            "content__c": "Id,Name,Email,AccountId,Account\n0031x00001TcVw7AAF,Jack Sparrow,jack.sparrow@piratas.com,0011x00001nHN9LAAW,\"Account:{Name=Evolutio Seguros, Id=0011x00001nHN9LAAW}\"\n0031x00001SEjrqAAD,David Jurado,dvdjg@hotmail.com",
+            "conversation__c": "@AI_obj_Conversation__cRef4"
         }
     ]
 }
