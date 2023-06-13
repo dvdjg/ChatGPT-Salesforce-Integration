@@ -36,4 +36,18 @@ public with sharing class SObjectListToCSVConverter_test {
             System.assertEquals(accounts[i].Phone, dataFields[2]);
         }
     }
+
+    @IsTest
+    public static void testQueryToCSV() {
+        Account[] accts = DataFactory.createAccountsWithContactsCasesAndOpps(
+            5,  // numBusinessAccounts
+            3,  // numContactsPerAcct
+            2,  // numCasesPerContact
+            1); // numOppsPerAcct
+            
+        String q = 'SELECT Id, Name, Email, Phone, Account.Name FROM Contact';
+        List<SObject> queryResults = Database.query(q);
+        String ret =  SObjectListToCSVConverter.convertToCSV(queryResults);
+        System.debug(ret);
+    }
 }

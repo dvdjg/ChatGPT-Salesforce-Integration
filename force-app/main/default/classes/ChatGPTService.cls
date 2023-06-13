@@ -52,7 +52,6 @@ public with sharing class ChatGPTService {
             SELECT Id, Name, role__c, content__c, conversation__r.Id, CreatedBy.Name, CreatedDate FROM AI_obj_RoleAndContent__c WHERE conversation__r.ExternalId__c=:conversationName ORDER BY Name, CreatedDate ASC
             ];
         
-        List<Object> lstPromptsToQuery = new List<Object>();
         Id conversationId;
         Integer idxContent = lstContents.size();
         Boolean noContents = idxContent == 0;
@@ -73,21 +72,38 @@ public with sharing class ChatGPTService {
             lstContentsToSave.add(prompt);
         }
 
-        for (AI_obj_RoleAndContent__c content : lstContents) {
-            Map<String, Object> promptBody = new Map<String, Object>{'role' => content.role__c, 'content' => content.content__c};
-            lstPromptsToQuery.add(promptBody);
-        }
-        
         if (!String.isBlank(messageText)) {
+            List<Object> lstPromptsToQuery = new List<Object>();
+            for (AI_obj_RoleAndContent__c content : lstContents) {
+                Map<String, Object> promptBody = new Map<String, Object>{'role' => content.role__c, 'content' => content.content__c};
+                lstPromptsToQuery.add(promptBody);
+            }
+        
             String responseJSON = generateResponse(lstPromptsToQuery); // Callout // 'Ok ok: ' + String.valueOf(Datetime.now()); // 
-            String response = processResponse(responseJSON);
             String name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
-            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'assistant', content__c = response);
+            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'assistant', content__c = responseJSON);
+            lstPromptsToQuery.add(new Map<String, Object>{'role' => prompt.role__c, 'content' => prompt.content__c});
             lstContents.add(prompt);
             lstContentsToSave.add(prompt);
+
+            String response = processResponse(responseJSON);
+            if (String.isNotBlank(response)) {
+                name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
+                prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'user', content__c = response);
+                lstPromptsToQuery.add(new Map<String, Object>{'role' => prompt.role__c, 'content' => prompt.content__c});
+                lstContents.add(prompt);
+                lstContentsToSave.add(prompt);
+
+
+                responseJSON = generateResponse(lstPromptsToQuery); // Callout 
+                name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
+                prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'assistant', content__c = responseJSON);
+                lstContents.add(prompt);
+                lstContentsToSave.add(prompt);
+            }
         }
 
-        // Do DML after the callout.
+        // Do DML after the callouts.
 
         if (noContents) {
             AI_obj_Conversation__c conversation = new AI_obj_Conversation__c(Name = conversationName, ExternalId__c = conversationName);
@@ -117,21 +133,30 @@ public with sharing class ChatGPTService {
 
 
     private static String  processResponse(String response) {
-        String ret = response;
-        if (response.startsWith('{') && response.endsWith('}')) {
-            AI_Response res = (AI_Response)JSON.deserializeStrict(response, AI_Response.class);
+        String ret = null;
+        System.debug('JSON Response: ' + response);
+        try {
+            if (response.startsWith('{') && response.endsWith('}')) {
+                AI_Response res = (AI_Response)JSON.deserializeStrict(response, AI_Response.class);
 
-            if (res.recipient == 'USER') {
-                ret = res.message;
-            } else if (res.recipient == 'SERVER' && res.action == 'QUERY') {
-                List<SObject> queryResults = Database.query(res.message);
-                ret =  SObjectListToCSVConverter.convertToCSV(queryResults);
-            } else if (res.recipient == 'SERVER' && res.action == 'APEX') {
-                ret = soapSforceCom200608Apex.evalString(res.message + ' System.debug(LoggingLevel.Error, JSON.serialize(result));');
-                System.debug(ret);
-            } else {
-                System.debug('Invalid path.');
+                if (res.recipient == 'USER') {
+                    //ret = res.message;
+                } else if (res.recipient == 'SERVER' && res.action == 'QUERY') {
+                    List<SObject> queryResults = Database.query(res.message);
+                    ret = JSON.serialize(queryResults); //SObjectListToCSVConverter.convertToCSV(queryResults);
+                } else if (res.recipient == 'SERVER' && res.action == 'APEX') {
+                    ret = soapSforceCom200608Apex.evalString(res.message + ' System.debug(LoggingLevel.Error, JSON.serialize(result));');
+                    System.debug(ret);
+                } else {
+                    System.debug('Invalid AI_Response.');
+                    ret = 'ERROR: The JSON is invalid. Plese retry.';
+                }
             }
+            System.debug('Response: ' + ret);
+        } catch(Exception e) {
+            System.debug(LoggingLevel.ERROR, 'Exception: ' + e.getMessage());
+            System.debug(LoggingLevel.ERROR, 'Exception Stack Trace: ' + e.getStackTraceString());
+            ret = 'ERROR: ' + e.getMessage();      
         }
         return ret;
     }
