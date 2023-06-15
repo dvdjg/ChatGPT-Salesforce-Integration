@@ -4,6 +4,7 @@
         <members>AI_obj_Conversation__c</members>
         <members>AI_obj_RoleAndContent__c</members>
         <members>OpenAI_Config__mdt</members>
+        <members>OpenAIendpoint__c</members>
         <name>CustomObject</name>
     </types>
     <types>
@@ -32,6 +33,8 @@
         <members>AI_obj_RoleAndContent__c.role__c</members>
         <members>OpenAI_Config__mdt.api_key__c</members>
         <members>OpenAI_Config__mdt.endpoint__c</members>
+        <members>OpenAIendpoint__c.api_key__c</members>
+        <members>OpenAIendpoint__c.endpoint__c</members>
         <name>CustomField</name>
     </types>
     <types>
@@ -55,6 +58,7 @@
     <types>
         <members>AI_obj_Conversation__c-AI Conversation Layout</members>
         <members>AI_obj_RoleAndContent__c-AI Role And Content Layout</members>
+        <members>OpenAI_Config__mdt-OpenAI Config Layout</members>
         <name>Layout</name>
     </types>
     <types>
@@ -65,7 +69,13 @@
     <types>
         <members>AI_obj_Conversation__c.All</members>
         <members>AI_obj_RoleAndContent__c.All</members>
+        <members>AI_obj_RoleAndContent__c.First</members>
+        <members>AI_obj_RoleAndContent__c.Second</members>
         <name>ListView</name>
+    </types>
+    <types>
+        <members>AI_User</members>
+        <name>PermissionSet</name>
     </types>
     <types>
         <members>Admin</members>
