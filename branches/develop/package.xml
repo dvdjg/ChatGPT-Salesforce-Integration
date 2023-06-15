@@ -9,9 +9,13 @@
     <types>
         <members>ChatGPT</members>
         <members>ChatGPTService</members>
+        <members>DataFactory</members>
+        <members>DataFactory_test</members>
         <members>RecordFieldsFetcher</members>
         <members>soapSforceCom200608Apex</members>
         <members>soapSforceCom200608Apex_test</members>
+        <members>SObjectListToCSVConverter</members>
+        <members>SObjectListToCSVConverter_test</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -34,12 +38,10 @@
         <members>chatGPTAPIKey</members>
         <name>CustomLabel</name>
     </types>
-    <!--
     <types>
         <members>OpenAI_Config.Main</members>
         <name>CustomMetadata</name>
     </types>
-    -->
     <types>
         <members>AI_obj_Conversation__c</members>
         <members>AI_obj_RoleAndContent__c</members>
@@ -64,6 +66,10 @@
         <members>AI_obj_Conversation__c.All</members>
         <members>AI_obj_RoleAndContent__c.All</members>
         <name>ListView</name>
+    </types>
+    <types>
+        <members>Admin</members>
+        <name>Profile</name>
     </types>
     <types>
         <members>Open_AI_URL</members>

@@ -19,8 +19,6 @@
                 <behavior>Readonly</behavior>
                 <field>ConversationIdentifier__c</field>
             </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>role__c</field>
@@ -30,7 +28,7 @@
                 <field>content__c</field>
             </layoutItems>
         </layoutColumns>
-        <style>TwoColumnsTopToBottom</style>
+        <style>OneColumn</style>
     </layoutSections>
     <layoutSections>
         <customLabel>false</customLabel>
