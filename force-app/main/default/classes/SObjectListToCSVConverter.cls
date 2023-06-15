@@ -72,8 +72,8 @@ public with sharing class SObjectListToCSVConverter {
                     } else {
                         fieldValues.add(fieldValue);
                     }
-                }
                 */
+                }
             }
 
             // Append the field values as a CSV row
