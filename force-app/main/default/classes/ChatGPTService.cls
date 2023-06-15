@@ -59,7 +59,7 @@ public with sharing class ChatGPTService {
         lstContentsToSave.add(prompt);
     }
 
-    public String generateResponse() {
+    private String generateResponse() {
         List<Object> lstPromptsToQuery = new List<Object>();
         for (AI_obj_RoleAndContent__c content : lstContents) {
             lstPromptsToQuery.add(new Map<String, Object>{'role' => content.role__c, 'content' => content.content__c});
@@ -79,6 +79,7 @@ public with sharing class ChatGPTService {
             conversationId = lstContents.get(0).conversation__c;
         }
 
+        Integer i = 0;
         while (!String.isBlank(messageText)) {
             addRoleAndContent('user', messageText);
         
@@ -93,19 +94,24 @@ public with sharing class ChatGPTService {
             } else if (response.startsWith(RESPONSE_ERROR)) {
                 messageText = response;
             } else {
-                messageText = null; // No issue new query
+                break; // No issue new query
+            }
+            if (++i > 5) {
+                System.debug('Reached max oppotunities to answer.');
+                break;
             }
         }
+    }
 
-        // Do DML after the callouts.
-
-        if (noContents) {
-            AI_obj_Conversation__c conversation = new AI_obj_Conversation__c(Name = conversationName, ExternalId__c = conversationName);
-            upsert conversation ExternalId__c;
-            conversationId = conversation.Id;
-        }
+    private void save() {
+        if (!lstContentsToSave.isEmpty()) {
+            Id conversationId = lstContents.get(0).conversation__c;
+            if (conversationId == null) {
+                AI_obj_Conversation__c conversation = new AI_obj_Conversation__c(Name = conversationName, ExternalId__c = conversationName);
+                upsert conversation ExternalId__c;
+                conversationId = conversation.Id;
+            }
         
-        if (lstContentsToSave.size() > 0) {
             for (AI_obj_RoleAndContent__c content : lstContentsToSave) {
                 content.conversation__c = conversationId;
             }
@@ -113,14 +119,11 @@ public with sharing class ChatGPTService {
         }
     }
 
-    private void save() {
-
-    }
-
     @AuraEnabled(cacheable=false)
     public static List<AI_obj_RoleAndContent__c> generateResponse(String messageText, String conversationName) {
         ChatGPTService serv = new ChatGPTService(conversationName);
         serv.processUserMessage(messageText);
+        serv.save(); // Do DML after the callouts.
         return serv.getPrompts();
     }
 
@@ -140,6 +143,7 @@ public with sharing class ChatGPTService {
     /**
      * @description Method to generate response from ChatGPT
      */
+    /*
     @AuraEnabled(cacheable=false)
     public static List<AI_obj_RoleAndContent__c> generateResponseOld(String messageText, String conversationName) {
 
@@ -217,6 +221,7 @@ public with sharing class ChatGPTService {
 
         return lstContents;
     }
+    */
 
     public class AI_Response {
         public AI_Response() {
