@@ -59,6 +59,7 @@ public with sharing class ChatGPTService {
         lstContentsToSave.add(prompt);
     }
 
+    @TestVisible 
     private String generateResponse() {
         List<Object> lstPromptsToQuery = new List<Object>();
         for (AI_obj_RoleAndContent__c content : lstContents) {
@@ -103,6 +104,7 @@ public with sharing class ChatGPTService {
         }
     }
 
+    @TestVisible 
     private void save() {
         if (!lstContentsToSave.isEmpty()) {
             Id conversationId = lstContents.get(0).conversation__c;
@@ -140,106 +142,27 @@ public with sharing class ChatGPTService {
         return response;
     }
 
-    /**
-     * @description Method to generate response from ChatGPT
-     */
-    /*
-    @AuraEnabled(cacheable=false)
-    public static List<AI_obj_RoleAndContent__c> generateResponseOld(String messageText, String conversationName) {
-
-        List<AI_obj_RoleAndContent__c> lstContentsToSave = new List<AI_obj_RoleAndContent__c>();
-        List<AI_obj_RoleAndContent__c> lstContents = [
-            SELECT Id, Name, role__c, content__c, conversation__r.Id, CreatedBy.Name, CreatedDate FROM AI_obj_RoleAndContent__c WHERE conversation__r.ExternalId__c=:conversationName ORDER BY Name, CreatedDate ASC
-            ];
-        
-        Id conversationId;
-        Integer idxContent = lstContents.size();
-        Boolean noContents = idxContent == 0;
-
-        if (noContents) {
-            String name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
-            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'system', content__c = 'You are a helpful assistant.');
-            lstContents.add(prompt);
-            lstContentsToSave.add(prompt);
-        } else {
-            conversationId = lstContents.get(0).conversation__c;
-        }
-
-        if (!String.isBlank(messageText)) {
-            String name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
-            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'user', content__c = messageText);
-            lstContents.add(prompt);
-            lstContentsToSave.add(prompt);
-        }
-
-        if (!String.isBlank(messageText)) {
-            List<Object> lstPromptsToQuery = new List<Object>();
-            for (AI_obj_RoleAndContent__c content : lstContents) {
-                Map<String, Object> promptBody = new Map<String, Object>{'role' => content.role__c, 'content' => content.content__c};
-                lstPromptsToQuery.add(promptBody);
-            }
-        
-            String responseJSON = generateResponse(lstPromptsToQuery); // Callout // 'Ok ok: ' + String.valueOf(Datetime.now()); // 
-            String name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
-            AI_obj_RoleAndContent__c prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'assistant', content__c = responseJSON);
-            lstPromptsToQuery.add(new Map<String, Object>{'role' => prompt.role__c, 'content' => prompt.content__c});
-            lstContents.add(prompt);
-            lstContentsToSave.add(prompt);
-
-            String response = processResponse(responseJSON);
-            if (String.isNotBlank(response)) {
-                name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
-                prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'user', content__c = response);
-                lstPromptsToQuery.add(new Map<String, Object>{'role' => prompt.role__c, 'content' => prompt.content__c});
-                lstContents.add(prompt);
-                lstContentsToSave.add(prompt);
-
-
-                responseJSON = generateResponse(lstPromptsToQuery); // Callout 
-                name = IDX_PFX + String.valueOf(idxContent++).leftPad(IDX_LEN, '0');
-                prompt = new AI_obj_RoleAndContent__c(Name = name, role__c = 'assistant', content__c = responseJSON);
-                lstContents.add(prompt);
-                lstContentsToSave.add(prompt);
-            }
-        }
-
-        // Do DML after the callouts.
-
-        if (noContents) {
-            AI_obj_Conversation__c conversation = new AI_obj_Conversation__c(Name = conversationName, ExternalId__c = conversationName);
-            upsert conversation ExternalId__c;
-            conversationId = conversation.Id;
-        }
-
-        for (AI_obj_RoleAndContent__c content : lstContentsToSave) {
-            content.conversation__c = conversationId;
-        }
-        
-        if (lstContentsToSave.size() > 0) {
-            insert lstContentsToSave;
-        }
-
-        return lstContents;
-    }
-    */
-
     public class AI_Response {
         public AI_Response() {
 
         }
         public String recipient;
-        public String message;
         public String action;
+        public String message;
     }
 
 
+    @TestVisible 
     private static String processResponse(String response) {
         String ret = response;
         try {
             Integer first = response.indexOf('{');
-            if (first != -1 && response.endsWith('}')) {
-                AI_Response res = (AI_Response)JSON.deserializeStrict(response.substring(first), AI_Response.class);
-
+            Integer last = response.lastIndexOf('}');
+            if (first != -1 && last != -1) {
+                String cut = response.substring(first, last+1);
+                System.debug('cut: ' + cut);
+                AI_Response res = (AI_Response)JSON.deserializeStrict(cut, AI_Response.class);
+                System.debug('AI_Response: ' + res);
                 if (res.recipient == 'USER') {
                     ret = 'USER: ' + res.message;
                 } else if (res.recipient == 'SERVER' && res.action == 'QUERY') {
