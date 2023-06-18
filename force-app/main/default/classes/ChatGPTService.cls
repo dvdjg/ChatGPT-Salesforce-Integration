@@ -153,7 +153,7 @@ public with sharing class ChatGPTService {
 
 
     @TestVisible 
-    private static String processResponse(String response) {
+    public static String processResponse(String response) {
         String ret = response;
         try {
             Integer first = response.indexOf('{');

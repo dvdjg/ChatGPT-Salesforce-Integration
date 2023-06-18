@@ -1,3 +1,6 @@
+/*
+ sfdx force:source:deploy --sourcepath ./force-app/main/default/classes/ChatGPTService_test.cls
+ */
 @isTest
 private with sharing class ChatGPTService_test {
     
@@ -103,8 +106,17 @@ private with sharing class ChatGPTService_test {
     }
     
     @isTest
-    static void testProcessResponse() {
+    static void testProcessSoqlResponse() {
         String response = '{"recipient":"SERVER", "action":"QUERY", "message":"SELECT Id, CaseNumber, Subject, Description, Status, CreatedDate FROM Case WHERE ContactEmail = \'asong@uog.com\' OR ContactPhone = \'(212) 842-5500\' AND CreatedDate = LAST_N_DAYS:365"}';
+        String str = ChatGPTService.processResponse(response);
+        System.debug(str);
+    }
+    
+    @isTest
+    static void testProcessApexResponse() {
+        Account acc = new Account(name = 'Dummy');
+        insert acc;
+        String response = '{"recipient":"SERVER", "action":"APEX", "message":"Contact newContact = new Contact(FirstName = \'Dave\', LastName = \'Jury\', Email = \'dvdjg@hotmail.com\', AccountId = \'' + acc.Id + '\'); insert newContact; Id result = newContact.Id;"}';
         String str = ChatGPTService.processResponse(response);
         System.debug(str);
     }
