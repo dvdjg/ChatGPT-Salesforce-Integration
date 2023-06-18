@@ -159,7 +159,9 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>AI Roles And Contents</pluralLabel>
-    <searchLayouts></searchLayouts>
+    <searchLayouts>
+        <listViewButtons>Mass_Delete_Records</listViewButtons>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>

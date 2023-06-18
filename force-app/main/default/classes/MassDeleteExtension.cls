@@ -15,7 +15,10 @@ public with sharing class MassDeleteExtension {
     
     public PageReference deleteRecords(){
         originalUrl = setCon.cancel();
-        delete setCon.getSelected();
+        System.debug(setCon.getSelected());
+        System.debug([SELECT Id, Name, conversation__c FROM AI_obj_RoleAndContent__c WHERE Id IN :setCon.getSelected()]);
+
+        delete [SELECT Id, Name, conversation__c FROM AI_obj_RoleAndContent__c WHERE Id IN :setCon.getSelected()];
         return originalUrl;
     }
 

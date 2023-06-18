@@ -159,7 +159,9 @@
         <type>Text</type>
     </nameField>
     <pluralLabel>AI Conversations</pluralLabel>
-    <searchLayouts></searchLayouts>
+    <searchLayouts>
+        <listViewButtons>Mass_Delete_Records</listViewButtons>
+    </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <visibility>Public</visibility>
 </CustomObject>
